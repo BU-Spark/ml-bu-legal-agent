@@ -1,14 +1,15 @@
 # Technical Project Document Template
 
-## *Authors, 20xx-Month-Day vx.x.x-dev*
+## *Sindhuja Kumar, Amogh Mittal, Tomas Samoulis, Riya Parikh <br /> 2025-02-11 v0.1.0-dev*
 
 ## Overview
 
-_In this document, based on the available project outline and summary of the project pitch, to the best of your abilities, you will come up with the technical plan or goals for implementing the project such that it best meets the stakeholder requirements._
+_The goal of the project is to design and prototype an AI-powered legal assistance chatbot tailored for individuals facing eviction and other housing-related legal issues. The chatbot should use (large language models) LLMs to provide end users with accurate legal information, assist in drafting legal pleadings, and guide them through court processes. As a team we will train and test LLMs on the curated datasets provided to us by the client that are credible legal sources (eg: MassLegalHelp.org) and evaluate the chatbot's response for accuracy with the 2L students assigned to this project._
 
 ### A. Provide a solution in terms of human actions to confirm if the task is within the scope of automation through AI.
 
 *To assist in outlining the steps needed to achieve our final goal, outline the AI-less process that we are trying to automate with Machine Learning. Provide as much detail as possible.*
+
 
 ### B. Problem Statement:
 
