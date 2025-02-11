@@ -13,14 +13,28 @@ _The goal of the project is to design and prototype an AI-powered legal assistan
 
 ### B. Problem Statement:
 
-*In as direct terms as possible, provide the “Data Science” or "Machine Learning" problem statement version of the overview. Think of this as translating the above into a more technical definition to execute on. eg: a classification problem to segregate users into one of three groups on based on the historical user data available from a publicly available database*
+Develop and evaluate an NLP-driven legal chatbot for eviction and housing-related queries. Fine-tune LLMs on curated legal datasets to generate accurate and contextually relevant responses, assessed using benchmark metrics and expert validation.
 
 ### C. Checklist for project completion
 
-*Provide a bulleted list to the best of your current understanding, of the concrete techinal goals and artifacts that, when complete, define the completion of the project. This checklist will likely evolve as your project progresses.*
+Checklist for Project Completion
+1. Proof of Concept (PoC) Deployment
+- AI-powered legal assistance chatbot hosted on Hugging Face.
 
-1. Deliverable 1
-2. Deliverable 2
+2. Code and Data Management
+
+- All source code uploaded to GitHub and Google Drive.
+- Cleaned and processed datasets stored in the designated Google Drive folder.
+- Code scripts for data cleaning, preprocessing, and visualization included.
+
+3. A Presentation with: 
+- Summary of How the LLM Works: Basic explanation of the LLM architecture and fine-tuning process.
+    - Focus on how it was tailored for the chatbot’s specific use case.
+- Findings on LLM Accuracy: Highlight key accuracy metrics (e.g., precision, recall, F1-score).
+    - Statistics and Visualizations: Graphs/tables showing model performance.
+- Future Development Recommendations
+    - Suggestions for scaling, integrating new datasets, or expanding functionality.
+    - Methods to improve response accuracy and mitigate errors.
 
 ### D. Outline a path to operationalization.
 
