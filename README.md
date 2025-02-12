@@ -8,30 +8,25 @@ _The goal of the project is to design and prototype an AI-powered legal assistan
 
 ### A. Provide a solution in terms of human actions to confirm if the task is within the scope of automation through AI.
 
-To assist in outlining the steps needed to achieve our final goal, we must outline the AI-less process that we are trying to automate with Machine Learning. Currently, individuals facing eviction or other housing-related legal issues navigate a complex, time-consuming, and often inaccessible legal system. Below is a breakdown of the manual process individuals must go through without AI assistance:
+To assist in outlining the steps needed to achieve our final goal, we must outline the AI-less process that we are trying to automate with machine learning. Currently, individuals facing eviction or other housing-related legal issues navigate a complex, time-consuming, and often inaccessible legal system. Below is a breakdown of the manual process individuals must go through without thr assistance of an AI legal chatbot:
 
 1. Identify the Legal Issue
-- Tenants must determine the nature of their legal problem (e.g., nonpayment of rent, lease violation, discrimination).
-- Research legal rights through online sources like MassLegalHelp.org or tenant advocacy groups.
+- Tenants must determine the nature of their legal problem whether that be nonpayment of rent, lease violation, discrimination, etc and then research their legal rights through online sources like MassLegalHelp.org or tenant advocacy groups.
 
 2. Seek Legal Information & Resources
-- Search for reliable legal aid websites, often encountering outdated or overwhelming information.
-- Contact community legal aid organizations, which typically have long wait times due to high demand.
+- Tenants must search for reliable and accurate legal aid websites or contact local community legal aid organizations. They must ensure they find the information in a timely manner such that it is still according to the law and arrives before their hearing date. During this process, tenants may become frustrated due to long wait times from high demand or even due to an overwhelming amount of information to decipher.
 
 3. Consult with Legal Aid or an Attorney
-- Low-income tenants often struggle to access direct legal representation.
-- Scheduling appointments with legal aid can take weeks, requiring documentation and intake forms.
+- Tenants must book an appointment to chat with an attorney who will represent their case. While those with the resources may find an attorney in a short time, low-income and undocumented tenants often struggle to access direct legal representation due to financial issues and documentation requirements. So, for certain groups, scheduling these appointments with legal aid can take weeks.
 
 4. Draft Legal Documents & Prepare for Court
-- Without legal representation, tenants must draft responses (e.g., motions to dismiss, requests for continuance).
-- Relying on generic templates, they risk making errors that could harm their case.
+- Tenants must make sure they are well prepared to represent themselves to the best of their abilities in court. This is definetly easier with a lawyer present, but without legal representation, tenants must draft responses (e.g., motions to dismiss, requests for continuance) themselves. Tenants going through the processes alone often rely on generic templates and risk making errors that could harm their case.
 
 5. Attend Hearings & Navigate Court Procedures
-- Tenants must gather evidence, prepare statements, and represent themselves in court.
-- Lack of understanding of legal terminology and court procedures increases the risk of unfavorable outcomes.
+- Tenants must gather evidence, prepare statements, and represent themselves in court. Tenants that lack the understanding of legal terminology and court procedures increase their risk of unfavorable outcomes.
 
 6. Follow-ups & Post-Hearing Steps
-- If the ruling is unfavorable, tenants must determine their next steps (e.g., filing appeals, negotiating payment plans) without structured guidance.
+- Tenants must determine their next steps (e.g., filing appeals, negotiating payment plans) without structured guidance if the ruling is unfavorable. 
 
 Challenges in this AI-less process include limited access to legal aid (due to resource constraints or high costs), complex legal language, time sensitivity of matters, and inconsistent information. By automating key aspects of legal assistance, the chatbot aims to provide immediate, accurate, and structured guidance on housing law, document drafting, and court procedures—reducing the burden on both tenants and legal aid organizations.
 
@@ -76,14 +71,12 @@ All the relevant technologies to make this available are still to be determined,
 - Data will come from sources including but not limited to Mass Legal Help, Mass. Governmental Websites, Massachusetts Legal Resource Finder, National Housing Law Project, National Consumer Law Center, MA Legislature, and case law sites.
 - All the data is being sourced/scraped from online websites, and can be considered unstructured in its format.
 - Data can be found at the following sites for reference:
-    - [Spark Data Sets List](https://docs.google.com/document/d/1neIGtYK0Wm3jK_5MzYZ0Bz30MBtzOQEl/edit)
+    - [Spark Data Sets List - contains links to 43 different websites](https://docs.google.com/document/d/1neIGtYK0Wm3jK_5MzYZ0Bz30MBtzOQEl/edit)
     - [50 Questions by Tenants](https://docs.google.com/document/d/1e9q4fUrA5hbgMdKLQh0ImUVkiZ_TWzEM/edit#heading=h.gjdgxs)
     - [Chapter 12: Evictions](https://www.masslegalhelp.org/housing-apartments-shelter/eviction/chapter-12-evictions)
     - [Legal Tactics: Tenants' Rights in Massachusetts](https://www.masslegalhelp.org/housing-apartments-shelter/tenants-rights/legal-tactics)
 
 ### References
-
-1. 
 
 ## Weekly Meeting Updates
 
