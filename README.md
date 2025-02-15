@@ -96,11 +96,9 @@ Checklist for Project Completion
 
 ### D. Outline a path to operationalization.
 
-*Data Science Projects should have an operationalized end point in mind from the onset. Briefly describe how you see the tool produced by this project being used by the end user beyond a jupyter notebook or proof of concept. If possible, be specific and call out the relevant technologies that will be useful when making this available to the stakeholders as a final deliverable.*
-
 The optimal use case for this product is as an assistive tool for low-income individuals with housing issues. This tool would ideally be hosted in the Greater Boston Legal Services website, allowing the public to access it. It would function like a regular chatbot, being able to answer questions and sustain a line of conversation. Currently, the client is indicating that their priority is answering general questions and providing accurate information, but has also suggested the chatbot be able to assist in drafting legal documents. 
 
-All the relevant technologies to make this available are still to be determined, however interfacing with major LLM API's to run the conversation will be the primary one. 
+Relevant technologies which will be needed to complete this project include interfacing with major LLM API's to run conversations. In its final deployment, this would involve accessing the API of the LLM which we are using in the backend of the website, applying our prompts, and in the front-end displaying the response. 
 
 ## Resources
 
