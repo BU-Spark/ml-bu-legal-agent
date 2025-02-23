@@ -7,7 +7,7 @@
    - **Context Injection**: Adding relevant context into the prompt instead of altering the LLM.  
    - **Vector Databases**: Storing large amounts of vector data for searching and retrieval based on similarity.  
    - **LangChain's RetrievalQA**: Enables optimized Q&A for documents by retrieving the closest vectors to the query and providing context to the LLM.  
-   [Read the full article here](https://medium.com/@alishasaboowala/build-your-first-llm-chatbot-a-beginners-guide-to-large-language-2c19d05b4d4f)
+   [Read the full article here](https://medium.com/@alisha3/build-your-first-llm-chatbot-77456438f57b)
 
 ## 2. **Build Your Own AI Chatbot: A Beginner’s Guide to RAG and LangChain - Suraj Bansal**  
    **Key Concepts:**
@@ -15,7 +15,7 @@
    - **Chunking and Overlap**: Splitting documents into smaller parts for memory efficiency and preserving context.  
    - **Stateful Chatbot**: Stores interaction history for natural conversation flow and context.  
    - **ConversationalRetrievalChain**: Builds effective question-answering applications by retrieving and processing documents in LangChain.  
-   [Read the full article here](https://medium.com/@surajbansal/build-your-own-ai-chatbot-a-beginners-guide-to-rag-and-langchain-76b6fe9286e8)
+   [Read the full article here](https://medium.com/@suraj_bansal/build-your-own-ai-chatbot-a-beginners-guide-to-rag-and-langchain-0189a18ec401)
 
 ## 3. **Building Effective Agents - Anthropic**  
    **Key Concepts:**
@@ -29,7 +29,7 @@
    **Key Insights:**
    - Pricing varies across providers (OpenAI, Azure, Anthropic, AWS, Google), with different models offering varying context sizes and rates.  
    - Considerations include input/output tokens and model specifications based on application needs.  
-   [Read the full article here](https://medium.com/@Experto_AI/llm-apis-price-comparison-by-model)
+   [Read the full article here](https://medium.com/@Experto_AI/llm-apis-price-comparison-by-model-66d1c7bd259d)
 
 ## 5. **Retrieval-Augmented Generation (RAG) - AWS**  
    **Key Insights:**
