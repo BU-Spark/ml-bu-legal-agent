@@ -69,7 +69,7 @@
    - **Model Response**: Use a structured prompt template to instruct DeepSeek R1 in generating a detailed response.  
    - **Chain Testing**: Ensure that the LLM generates fact-based responses strictly from the retrieved context.  
    
-   [Read More About DeepSeek R1]([https://www.deepsseek.com/](https://www.analyticsvidhya.com/blog/2025/01/rag-system-using-deepseek/))
+   [Read More About DeepSeek R1](https://www.analyticsvidhya.com/blog/2025/01/rag-system-using-deepseek/)
 
 ## 8. **Building Agentic RAG with DeepSeek R1 and Qwen**  
    **Overview of Qwen 2.5**:  
