@@ -28,5 +28,29 @@ To get started with this project, follow the steps below:
    ```bash
    git clone https://github.com/BU-Spark/ml-bu-legal-agent.git
    cd ml-bu-legal-agent
+   ```
+  
+2.  **Create a `.env` file:**
+
+    * In the root directory of the repository, create a file named `.env`.
+    * Add your OpenAI API key to the `.env` file:
+
+        ```
+        OPENAI_API_KEY=your-actual-api-key
+        ```
+
+        * Replace `your-actual-api-key` with your actual OpenAI API key.
+
+3.  **Install dependencies:**
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Run the script:**
+
+    ```bash
+    python poc-v1/pdf_process.ipynb
+    ```
 
 [will update as we add more code to repo]
