@@ -29,8 +29,21 @@ To get started with this project, follow the steps below:
    git clone https://github.com/BU-Spark/ml-bu-legal-agent.git
    cd ml-bu-legal-agent
    ```
+
+2. **Download and pull Ollama**:
+    * Download here: https://ollama.com/download
+    * In your terminal, enter the command
+         ```
+          ollama pull deepseek-r1:1.5b
+         ```
+    
+    * To verify the download
+         ```
+          ollama list
+         ```
+
   
-2.  **Create a `.env` file:**
+3.  **Create a `.env` file:**
 
     * In the root directory of the repository, create a file named `.env`.
     * Add your OpenAI API key to the `.env` file:
@@ -41,13 +54,13 @@ To get started with this project, follow the steps below:
 
         * Replace `your-actual-api-key` with your actual OpenAI API key.
 
-3.  **Install dependencies:**
+4.  **Install dependencies:**
 
     ```bash
     pip install -r requirements.txt
     ```
 
-4.  **Run the script:**
+5.  **Run the script:**
 
     ```bash
     python poc-v1/pdf_process.ipynb
