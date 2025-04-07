@@ -11,6 +11,10 @@
 # Temprorary PDF extration directory from zip file 
 temp_pdfs/
 
+# bytecode-compiled versions of Python files.
+poc_v1.5\__pycache__/
+*.pyc
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
