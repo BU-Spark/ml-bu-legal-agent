@@ -3,7 +3,14 @@ import shutil
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.docstore.document import Document
+from langchain.chains import RetrievalQA
+from llm_interface import LLM  # Import the LLM interface
+from openai_llm import OpenAILLM 
+from ollama_llm import OllamaLLM 
+from config import DEFAULT_LLM, OPENAI_DEFAULT_MODEL, OLLAMA_DEFAULT_MODEL
 
+
+# --- Vector Store Management ---
 def create_vector_store(chunks, persist_dir: str):
     """Create and persist a Chroma vector store using OpenAI embeddings."""
     
@@ -32,16 +39,50 @@ def create_vector_store(chunks, persist_dir: str):
         print(f"Error creating vector store: {e}")
         return None  # Return None if an error occurs
 
-def query_vector_store(vector_db, query, role="general",  k_mmr=5, fetch_k=3):
-    ''' Finds the most relevant chunks based on the query.
-    Switching from similarity to MMR bc MMR prioritizes diversity in the results, 
-    ensuring a mix of relevant but non-redundant information, 
-    whereas similarity search focuses solely on the closest matches.
-    '''
-    results = vector_db.max_marginal_relevance_search(query, k=k_mmr)
-    filtered_results = [doc.page_content for doc in results if doc.metadata.get("role", "general") == role]
+def load_vector_store(persist_dir: str):
+    """Loads an existing Chroma vector store."""
+    try:
+        embedding_model = OpenAIEmbeddings()
+        vector_db = Chroma(persist_directory=persist_dir, embedding_function=embedding_model)
+        print(f"Vector store loaded from {persist_dir}")
+        return vector_db
+    except Exception as e:
+        print(f"Error loading vector store: {e}")
+        return None
 
-    if not filtered_results:  # Fallback if no perfect role match
-        filtered_results = [doc.page_content for doc in results]
+# --- Question Answering with LLM ---
+def query_vector_store(vector_db, query, role="general",  k_retriever=3, score_threshold=0.3):
+    """Queries the vector store and generates a natural language response using an LLM."""
+    if vector_db is None:
+        print("Error: Vector store not initialized.")
+        return "Error: Vector store not initialized."
 
-    return filtered_results[:fetch_k]  # Return only the top k results
+    if DEFAULT_LLM == "openai":
+        llm_engine: LLM = OpenAILLM(model_name=OPENAI_DEFAULT_MODEL)
+    elif DEFAULT_LLM == "ollama":
+        llm_engine: LLM = OllamaLLM(model_name=OLLAMA_DEFAULT_MODEL)
+    else:
+        raise ValueError(f"Unsupported LLM type: {DEFAULT_LLM}")
+
+    search_kwargs = {
+        "k": k_retriever,
+        "score_threshold": score_threshold
+    }
+    if role != "general":
+        search_kwargs["filter"] = {"role": role}
+
+    retriever = vector_db.as_retriever(
+        search_type="similarity_score_threshold",
+        search_kwargs=search_kwargs
+    )
+
+    # Instead of RetrievalQA, we'll manually handle the prompt and LLM call
+    relevant_docs = retriever.get_relevant_documents(query)
+    context = "\n".join([doc.page_content for doc in relevant_docs])
+
+    try:
+        response = llm_engine.generate_response(question=query, context=context)
+        return response
+    except Exception as e:
+        print(f"Error during LLM query: {e}")
+        return "Sorry, there was an error processing your request."

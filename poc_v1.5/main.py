@@ -2,7 +2,7 @@
 from config import load_api_key, VECTOR_DB_DIR, TEMP_PDF_DIR, DATA_DIR
 from pdf_processing import extract_zip, process_single_pdf, determine_role
 from text_processing import create_chunks_with_headers
-from vector_store import create_vector_store, query_vector_store
+from vector_store import create_vector_store, query_vector_store, load_vector_store
 
 # Library imports
 import os
@@ -26,39 +26,28 @@ def load_and_process_pdfs(zip_path):
 
 def main():
     load_api_key()
-    data_dir = DATA_DIR
-    zip_file_path = data_dir + "/Legal-Tactics-Book.zip" 
+    zip_file_path = DATA_DIR
 
-    print("Processing PDFs into chunks...")
-    document_chunks = load_and_process_pdfs(zip_file_path)
-    print(f"Total chunks created: {len(document_chunks)}")
-    
-    # Tests
-    if document_chunks:
-        print(f"Example chunk:\n{document_chunks[0].page_content[:500]}")
-        print(f"Metadata: {document_chunks[0].metadata}")
-
-    print("Building the vector store...")
-    vector_db = create_vector_store(document_chunks, VECTOR_DB_DIR)
-    if vector_db:
-        print(f"Vector store successfully created at {VECTOR_DB_DIR}")
-
-        # Example queries
-        tenant_query = "What rights do tenants have during eviction?"
-        landlord_query = "What obligations do landlords have for maintenance?"
-
-        tenant_results = query_vector_store(vector_db, tenant_query, role="tenant")
-        landlord_results = query_vector_store(vector_db, landlord_query, role="landlord")
-
-        print("\nTenant Response:")
-        for result in tenant_results:
-            print(result[:300])
-
-        print("\nLandlord Response:")
-        for result in landlord_results:
-            print(result[:300])
+    if os.path.exists(VECTOR_DB_DIR) and os.listdir(VECTOR_DB_DIR):
+        print("Loading existing vector store...")
+        vector_db = load_vector_store(VECTOR_DB_DIR)
     else:
-        print("Failed to create vector store, cannot perform queries.")
+        print("Processing PDFs and building the vector store...")
+        document_chunks = load_and_process_pdfs(zip_file_path)
+        print(f"Total chunks created: {len(document_chunks)}")
+
+        # Tests
+        if document_chunks:
+            print(f"Example chunk:\n{document_chunks[0].page_content[:500]}")
+            print(f"Metadata: {document_chunks[0].metadata}")
+
+        vector_db = create_vector_store(document_chunks, VECTOR_DB_DIR)
+        
+        if vector_db:
+            print(f"Vector store successfully created at {VECTOR_DB_DIR}")
+        else:
+            print("Failed to create vector store, cannot perform queries.")
+
 
 if __name__ == "__main__":
     main()

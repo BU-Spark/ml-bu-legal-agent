@@ -11,3 +11,4 @@ gradio
 sentence-transformers
 openai
 tiktoken
+langchain-openai
