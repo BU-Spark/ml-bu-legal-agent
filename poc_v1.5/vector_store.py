@@ -51,7 +51,7 @@ def load_vector_store(persist_dir: str):
         return None
 
 # --- Question Answering with LLM ---
-def query_vector_store(vector_db, query, role="general",  k_retriever=3, score_threshold=0.3):
+def query_vector_store(vector_db, query, role="general",  k_retriever=5, score_threshold=0.3):
     """Queries the vector store and generates a natural language response using an LLM."""
     if vector_db is None:
         print("Error: Vector store not initialized.")
