@@ -27,7 +27,11 @@ def load_and_process_pdfs(zip_path):
 def main():
     load_api_key()
     zip_file_path = DATA_DIR
-
+    if platform.system() == "Darwin":  # "Darwin" is the kernel name for macOS
+        home_dir = os.path.expanduser("~")
+        vector_store_dir_name = "my_legal_agent_chroma_db"
+        VECTOR_DB_DIR = os.path.join(home_dir, vector_store_dir_name)
+    
     if os.path.exists(VECTOR_DB_DIR) and os.listdir(VECTOR_DB_DIR):
         print("Loading existing vector store...")
         vector_db = load_vector_store(VECTOR_DB_DIR)
