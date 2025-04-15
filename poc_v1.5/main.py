@@ -5,6 +5,7 @@ from text_processing import create_chunks_with_headers
 from vector_store import create_vector_store, query_vector_store, load_vector_store
 
 # Library imports
+import platform  # To detect the operating system
 import os
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
