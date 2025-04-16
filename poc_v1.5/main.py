@@ -5,6 +5,7 @@ from text_processing import create_chunks_with_headers
 from vector_store import create_vector_store, query_vector_store, load_vector_store
 
 # Library imports
+import platform  # To detect the operating system
 import os
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
@@ -27,7 +28,11 @@ def load_and_process_pdfs(zip_path):
 def main():
     load_api_key()
     zip_file_path = DATA_DIR
-
+    if platform.system() == "Darwin":  # "Darwin" is the kernel name for macOS
+        home_dir = os.path.expanduser("~")
+        vector_store_dir_name = "my_legal_agent_chroma_db"
+        VECTOR_DB_DIR = os.path.join(home_dir, vector_store_dir_name)
+    
     if os.path.exists(VECTOR_DB_DIR) and os.listdir(VECTOR_DB_DIR):
         print("Loading existing vector store...")
         vector_db = load_vector_store(VECTOR_DB_DIR)

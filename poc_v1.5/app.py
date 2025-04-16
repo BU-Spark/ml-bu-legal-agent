@@ -1,10 +1,16 @@
 import gradio as gr
+import platform
 import os
 from config import load_api_key, VECTOR_DB_DIR
 from vector_store import load_vector_store, query_vector_store
 
 # Load API key and vector store on startup
 load_api_key()
+if platform.system() == "Darwin":  # "Darwin" is the kernel name for macOS
+        home_dir = os.path.expanduser("~")
+        vector_store_dir_name = "my_legal_agent_chroma_db"
+        VECTOR_DB_DIR = os.path.join(home_dir, vector_store_dir_name)
+    
 vector_db = load_vector_store(VECTOR_DB_DIR)
 
 def ask_star(user_query, role):
