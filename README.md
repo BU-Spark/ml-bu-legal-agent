@@ -25,7 +25,7 @@ The final deliverables of the project will include:
 
 
 ### Task Status Key
-| Emoji | Meaning              |
+| Task Status | Meaning              |
 |-------|----------------------|
 | ✅    | Task completed        |
 | ⏳    | Work in progress      |
