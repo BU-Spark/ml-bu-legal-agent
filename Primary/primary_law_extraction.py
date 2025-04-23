@@ -10,7 +10,15 @@ chapter_urls = [
     "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleI/Chapter185C",  # Housing Court
     "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleI/Chapter186",   # Estates for Years and At Will
     "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleI/Chapter186A",  # Foreclosed Properties
-    "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleIII/Chapter239" # Evictions (Summary Process)
+    "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleIII/Chapter239", # Evictions (Summary Process)
+    "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleIII/Chapter209A",
+    "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXVII/Chapter121B",
+    "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleIX/Chapter59/Section12C", 
+    "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40T",
+    "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXVI/Chapter111",
+    "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleIII/Chapter242",
+    "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXX/Chapter139",
+    "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXV/Chapter93A"
 ]
 
 headers = {

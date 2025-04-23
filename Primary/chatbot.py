@@ -1,15 +1,14 @@
-# ==============================================
-# 1. Import Libraries
-# ==============================================
+
+# Import Libraries
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 
 import re
 
-# ==============================================
-# 2. Load Chroma VectorStore
-# ==============================================
+
+# Load Chroma VectorStore
+
 persist_directory = "massachusetts_laws_chroma_db"
 
 # Reuse the same embedding model
@@ -23,9 +22,9 @@ law_vectorstore = Chroma(
 
 print("✅ Chroma VectorStore loaded successfully.")
 
-# ==============================================
-# 3. Helper Function to Extract Chapter, Section
-# ==============================================
+
+# Helper Function to Extract Chapter, Section
+
 def extract_chapter_section(url):
     """
     Given a URL like:
@@ -115,9 +114,8 @@ def ask_question(query, k=2):
     return answer
 
 
-# ==============================================
-# 5. Test It!
-# ==============================================
+# Test It!
+
 if __name__ == "__main__":
     while True:
         user_query = input("\n🔍 Ask a legal question (or type 'exit' to quit):\n> ")
