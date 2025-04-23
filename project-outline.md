@@ -1,6 +1,6 @@
 # BU Law Legal Agent - Technical Project Document
 
-## *Sindhuja Kumar, Amogh Mittal, Riya Parikh, Tomas Samoulis <br /> 2025-02-11 v0.1.0-dev*
+## *Sindhuja Kumar, Amogh Mittal, Riya Parikh, Tomas Samuolis <br /> 2025-02-11 v0.1.0-dev*
 
 ## Overview
 
