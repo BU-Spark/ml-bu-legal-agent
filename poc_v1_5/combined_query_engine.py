@@ -3,7 +3,7 @@
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from poc_v1_5.openai_llm import OpenAILLM
+from openai_llm import OpenAILLM
 
 from pathlib import Path
 
