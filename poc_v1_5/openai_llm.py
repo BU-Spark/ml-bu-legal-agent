@@ -1,9 +1,9 @@
 from langchain_openai import ChatOpenAI  # Import ChatOpenAI
 from langchain_core.language_models import BaseChatModel
 #from llm_interface import LLM
-from poc_v1_5.llm_interface import LLM
+from llm_interface import LLM
 #from prompt_templates import FIFTH_GRADE_PROMPT_TEMPLATE
-from poc_v1_5.prompt_templates import FIFTH_GRADE_PROMPT_TEMPLATE
+from prompt_templates import FIFTH_GRADE_PROMPT_TEMPLATE
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 
 class OpenAILLM(LLM):

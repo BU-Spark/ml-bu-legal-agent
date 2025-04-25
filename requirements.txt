@@ -12,3 +12,5 @@ sentence-transformers
 openai
 tiktoken
 langchain-openai
+selenium
+langchain-core
