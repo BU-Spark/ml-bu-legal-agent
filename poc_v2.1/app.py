@@ -15,6 +15,8 @@ def ask_star(user_query, role):
     if vector_db:
         response, citations = query_vector_store(scraped_vector_db, vector_db, user_query, role=role)
         citation_text = "\n".join(f"• {c}" for c in citations)
+        if response == "Sorry, I can't answer that question. I can only answer questions about Massachusetts tenant law. I may have misunderstood you, so try to phrase your input as a simple question.":
+            return response
         return f"{response}\n\n📚 Sources:\n{citation_text}"
         # return response
     else:
