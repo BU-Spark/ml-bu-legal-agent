@@ -77,8 +77,8 @@ To get started with this project, follow the steps below:
 5.  **Run the script:**
 
     ```bash
-    python poc-v1.6/main.py
-    python poc-v1.6/app.py
+    python poc-v2.1/main.py
+    python poc-v2.1/app.py
     ```
 
 6. **Launch the App Locally:**
