@@ -32,7 +32,7 @@ The final deliverables of the project will include:
 | 🚧   | Blocker      |
 | 🛑    | Not started    |
 
-## Installation & Setup
+## Installation & Setup (can be found in `README` of poc_v2.1 folder as well)
 
 To get started with this project, follow the steps below:
 
@@ -77,8 +77,8 @@ To get started with this project, follow the steps below:
 5.  **Run the script:**
 
     ```bash
-    python poc-v1.6/main.py
-    python poc-v1.6/app.py
+    python poc-v2.1/main.py
+    python poc-v2.1/app.py
     ```
 
 6. **Launch the App Locally:**
@@ -86,6 +86,11 @@ To get started with this project, follow the steps below:
     After running the above scripts, open your browser and go to [`http://localhost:7860/`](http://localhost:7860/) to access the app locally. 
     
     You should be able to see the application running on your local machine.
+
+### Further Notes:
+* After the chroma databases are installed the first time, it is uneccesary to run `main.py` again, unless you change code inherent to how the databases are being written or validated, or if you are adding new documents/changing the databases themselves. 
+
+
 
 ## Next Steps
 
@@ -98,3 +103,4 @@ To get started with this project, follow the steps below:
 * Integrate a memory component to enable the chatbot to handle follow-up questions in a more conversational manner.
 * Investigate the potential for the chatbot to assist users in filling out legal forms, particularly for tenants. 
 * Develop the Ollama DeepSeek model, despite concerns regarding performance, as it may prove worthwhile given budgetary constraints.
+* Integrate a way to access the cited sources directly through the chatbot website

@@ -20,7 +20,7 @@ The codebase is modularized into the following files:
 
 * **`config.py`:**
     * Handles loading environment variables (like the OpenAI API key) from a `.env` file.
-    * Defines project-level constants such as the directory for the Chroma vector database and a temporary directory for extracted PDFs.
+    * Defines project-level constants such as the directory for the Chroma vector databases and a temporary directory for extracted PDFs.
 * **`pdf_processing.py`:**
     * Contains functions for extracting PDF files from a ZIP archive (`extract_zip`).
     * Extracts text content from individual PDFs while attempting to preserve structure based on headings (`pdf_to_markdown_string`).
@@ -38,6 +38,22 @@ The codebase is modularized into the following files:
     * Calls functions to extract, process, and chunk the PDF documents.
     * Creates the Chroma vector store.
     * Demonstrates example queries for tenant-related and landlord-related information, filtering the results by their determined roles.
+* **`data_to_chroma_function.py`:**
+    * Converts the json document "massachusetts_primary_laws_PERFECTION" into a chroma_db
+* **`llm_interface.py`"**
+    * Creates an LLM class through which we define our LLM
+* **`massachusetts_primary_laws_PERFECTION.json`:**
+    * JSON file copied from the `Primary` folder which contains the finalized web-scraped data 
+* **`ollama_llm.py`:**
+    * Not an actively working file, but is the DeepSeek alternative implementation to using OpenAI's ChatGPT for the calls. The implementation to make the call with data has not been adequetely implemented, and was deprioritized because DeepSeek queries take significatly longer and tend to be worse than OpenAI
+    * In the future, should DeepSeek improve, may be a viable implementation to return to which is free
+* **`openai_llm.py`:**
+    * A class which creates the implementation of the OPENAI object, which we use to make calls to the OpenAI API.
+* **`prompt_templates.py`:**
+    * A variable store for the two prompts used in the code
+* **`scraping_load.py`:**
+    * Contains function (`combined_similarity_search`) which finds the most relevant documents to a query from both databases
+    * Contains function (`format_context_with_sources`) which formats the relevant documents in an efficient way to then give to the AI
 
 ## Setup and Usage
 
@@ -76,12 +92,24 @@ The codebase is modularized into the following files:
     ```bash
     python main.py
     ```
+    * The script will:
+        * Process the PDFs from the specified ZIP file.
+        * Create two Chroma vector database in a directory (if they don't already exist) named `chroma_db` and `scraped_chroma_db` in your current working directory.
+        * Print the total number of processed chunks and an example chunk with its metadata.
 
-3.  The script will:
-    * Process the PDFs from the specified ZIP file.
-    * Create a Chroma vector database in a directory named `chroma_db` in your current working directory.
-    * Print the total number of processed chunks and an example chunk with its metadata.
-    * Perform example queries for tenant and landlord information, showing the top results.
+3. Run the `app.py` script
+     
+    ```bash
+    python app.py
+    ```
+    Which will create a localhost on your machine to run the Chatbot, which you can access at [`http://localhost:7860/`](http://localhost:7860/)
+    
+
+#### Further Notes:
+* After the chroma databases are installed the first time, it is uneccesary to run `main.py` again, unless you change code inherent to how the databases are being written or validated, or if you are adding new documents/changing the databases themselves. 
+
+
+
 
 ## Key Concepts
 
@@ -96,8 +124,6 @@ The codebase is modularized into the following files:
 * **Dynamic ZIP File Path:** Allow the user to specify the ZIP file path as a command-line argument or through configuration.
 * **Configuration Options:** Make chunk size, overlap, and other parameters configurable.
 * **Error Handling:** Implement more comprehensive error handling throughout the codebase.
-* **Persistence of Vector Store:** The current implementation removes the existing vector store each time it runs. Consider making persistence optional or the default behavior.
-* **User Interface:** Develop a user interface (e.g., using Gradio as suggested by the initial `requirements.txt`) to interact with the system and perform custom queries.
 * **Advanced Text Processing:** Explore more advanced techniques for text extraction and structuring.
 * **Testing:** Add unit and integration tests to ensure the reliability of the codebase.
 
