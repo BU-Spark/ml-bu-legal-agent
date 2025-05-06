@@ -5,6 +5,16 @@
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
+# Sensitive Data
+.env
+
+# Temprorary PDF extration directory from zip file 
+temp_pdfs/
+
+# bytecode-compiled versions of Python files.
+poc_v1.5\__pycache__/
+*.pyc
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
