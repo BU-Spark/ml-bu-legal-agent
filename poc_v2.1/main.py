@@ -7,7 +7,7 @@ from data_to_chroma_function import create_scraped_vector_store
 
 # Library imports
 import os
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 
 def load_and_process_pdfs(zip_path):

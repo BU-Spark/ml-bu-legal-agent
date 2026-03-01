@@ -9,18 +9,31 @@ vector_db = load_vector_store(VECTOR_DB_DIR)
 scraped_vector_db = load_vector_store(SCRAPED_VECTOR_DB_DIR)
 
 def ask_star(user_query, role):
-    """
-    Function to handle user queries and return the agent's response.
-    """
-    if vector_db:
-        response, citations = query_vector_store(scraped_vector_db, vector_db, user_query, role=role)
-        citation_text = "\n".join(f"• {c}" for c in citations)
-        if response == "Sorry, I can't answer that question. I can only answer questions about Massachusetts tenant law. I may have misunderstood you, so try to phrase your input as a simple question.":
-            return response
-        return f"{response}\n\n📚 Sources:\n{citation_text}"
-        # return response
-    else:
+    if not vector_db:
         return "Error: Vector store not loaded. Please ensure the backend is set up correctly."
+
+    refusal = (
+        "Sorry, I can't answer that question. I can only answer questions about Massachusetts tenant law. "
+        "I may have misunderstood you, so try to phrase your input as a simple question."
+    )
+
+    # 1) First attempt (requested role)
+    response, citations = query_vector_store(scraped_vector_db, vector_db, user_query, role=role)
+    citation_text = "\n".join(f"• {c}" for c in citations) if citations else ""
+
+    # 2) If we got the refusal but we DO have citations, it's likely a false refusal.
+    #    Retry in GENERAL mode (neutral) to avoid role-guard bugs.
+    if response.strip() == refusal and citations:
+        response2, citations2 = query_vector_store(scraped_vector_db, vector_db, user_query, role="general")
+        # Prefer retry result if it is not the same refusal
+        if response2.strip() != refusal:
+            response, citations = response2, citations2
+            citation_text = "\n".join(f"• {c}" for c in citations) if citations else ""
+
+    # 3) Render output
+    if citations:
+        return f"{response}\n\n📚 Sources:\n{citation_text}"
+    return response
 
 if __name__ == "__main__":
     iface = gr.Interface(
