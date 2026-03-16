@@ -1,4 +1,5 @@
 import os
+import sqlite3
 import shutil
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
@@ -110,8 +111,31 @@ def create_vector_store(chunks, persist_dir: str):
         return None  # Return None if an error occurs
 
 
+def vector_store_has_embeddings(persist_dir: str) -> bool:
+    """Returns True only when the Chroma SQLite file exists and contains embeddings."""
+    db_path = os.path.join(persist_dir, "chroma.sqlite3")
+    if not os.path.exists(db_path):
+        return False
+
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM embeddings")
+        return (cur.fetchone() or [0])[0] > 0
+    except Exception:
+        return False
+    finally:
+        if conn is not None:
+            conn.close()
+
+
 def load_vector_store(persist_dir: str):
     """Loads an existing Chroma vector store."""
+    if not vector_store_has_embeddings(persist_dir):
+        print(f"Vector store at {persist_dir} is empty or invalid.")
+        return None
+
     try:
         embedding_model = OpenAIEmbeddings()
         vector_db = Chroma(persist_directory=persist_dir, embedding_function=embedding_model)

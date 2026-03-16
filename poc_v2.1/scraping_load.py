@@ -14,7 +14,6 @@ def expand_query_for_role(query: str, role: str | None) -> str:
     q = (query or "").strip()
 
     if role == "tenant":
-        # Bias toward tenant protections, defenses, remedies, retaliation, habitability, security deposit, etc.
         return (
             f"{q} tenant rights remedies defenses retaliation habitability "
             f"notice to quit illegal eviction lockout utilities shutoff "
@@ -22,7 +21,6 @@ def expand_query_for_role(query: str, role: str | None) -> str:
         )
 
     if role == "landlord":
-        # Bias toward landlord compliance, procedure, notices, filings, and risk areas
         return (
             f"{q} landlord compliance lawful eviction procedure "
             f"notice to quit summary process filing service requirements "
@@ -30,8 +28,32 @@ def expand_query_for_role(query: str, role: str | None) -> str:
             f"avoid self-help eviction retaliation discrimination"
         )
 
-    # General / default: neutral legal framing
     return f"{q} Massachusetts eviction notice requirements notice to quit summary process"
+
+
+def interleave_docs(docs_law, docs_lt, k):
+    merged = []
+    max_len = max(len(docs_law), len(docs_lt))
+
+    for i in range(max_len):
+        if i < len(docs_law):
+            merged.append(docs_law[i])
+        if i < len(docs_lt):
+            merged.append(docs_lt[i])
+        if len(merged) >= k:
+            break
+
+    return merged[:k]
+
+
+def extract_pdf_title(page_content, fallback):
+    for line in (page_content or "").splitlines():
+        line = line.strip()
+        if line.startswith("##"):
+            title = line.lstrip("#").strip()
+            if title:
+                return title
+    return fallback
 
 
 def combined_similarity_search(scraped_db, doc_db, query, role=None, k=5):
@@ -40,21 +62,19 @@ def combined_similarity_search(scraped_db, doc_db, query, role=None, k=5):
 
     expanded_query = expand_query_for_role(query, role)
 
-    # ---- Legal Tactics / PDF docs retrieval ----
-    if role:
-        raw_lt = lt_vs.similarity_search_with_score(expanded_query, k=25)
+    raw_lt = lt_vs.similarity_search_with_score(expanded_query, k=25)
+    if role and role != "general":
         docs_role = [doc for doc, score in raw_lt if doc.metadata.get("role", "") == role]
         if docs_role:
             docs_lt = docs_role[:k]
         else:
             docs_lt = [doc for doc, score in raw_lt][:k]
+    else:
+        docs_lt = [doc for doc, score in raw_lt][:k]
 
-    # ---- Massachusetts law retrieval (scraped DB) ----
-    # Also use expanded query to steer retrieval
     docs_law = law_vs.similarity_search(expanded_query, k=k)
 
-    # Keep your existing behavior: merge and return top k total
-    return (docs_law + docs_lt)[:k]
+    return interleave_docs(docs_law, docs_lt, k)
 
 
 def format_context_with_sources(docs):
@@ -66,10 +86,17 @@ def format_context_with_sources(docs):
         source = doc.metadata.get("source", "Unknown Source")
         name = doc.metadata.get("section_name", doc.metadata.get("source", f"Doc {i}"))
         url = doc.metadata.get("section_url", "")
+        page_number = doc.metadata.get("page_number")
 
-        citation = f"[{i}] {name} ({source})"
         if url:
-            citation += f" — {url}"
+            citation = f"[{i}] {name} ({source})"
+            citation += f" - {url}"
+        else:
+            pdf_title = extract_pdf_title(content, source)
+            citation = f"[{i}] {pdf_title}"
+            if page_number:
+                citation += f", p. {page_number}"
+            citation += f" ({source})"
 
         combined_context += f"\n\n=== Source [{i}] ===\n{content}"
         citations.append(citation)
