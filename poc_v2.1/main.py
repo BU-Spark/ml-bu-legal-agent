@@ -2,12 +2,12 @@
 from config import load_api_key, VECTOR_DB_DIR, TEMP_PDF_DIR, DATA_DIR, SCRAPED_VECTOR_DB_DIR
 from pdf_processing import extract_zip, process_single_pdf, determine_role
 from text_processing import create_chunks_with_headers
-from vector_store import create_vector_store, query_vector_store, load_vector_store
+from vector_store import create_vector_store, query_vector_store, load_vector_store, vector_store_has_embeddings
 from data_to_chroma_function import create_scraped_vector_store
 
 # Library imports
 import os
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 
 def load_and_process_pdfs(zip_path):
@@ -17,11 +17,17 @@ def load_and_process_pdfs(zip_path):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 
     for pdf in pdf_files:
-        markdown_sections = process_single_pdf(pdf)
-        enriched_chunks = create_chunks_with_headers(markdown_sections, text_splitter)
-        for chunk in enriched_chunks:
-            role = determine_role(chunk)
-            all_chunks.append(Document(page_content=chunk, metadata={"source": os.path.basename(pdf), "role": role}))
+        page_records = process_single_pdf(pdf)
+        chunk_payloads = create_chunks_with_headers(page_records, text_splitter)
+        for chunk_payload in chunk_payloads:
+            chunk_text = chunk_payload["page_content"]
+            role = determine_role(chunk_text)
+            metadata = {
+                **chunk_payload["metadata"],
+                "source": os.path.basename(pdf),
+                "role": role,
+            }
+            all_chunks.append(Document(page_content=chunk_text, metadata=metadata))
     return all_chunks
 
 
@@ -30,11 +36,11 @@ def main():
     zip_file_path = DATA_DIR
 
     #Creating the Document DB
-    if os.path.exists(VECTOR_DB_DIR) and os.listdir(VECTOR_DB_DIR):
+    if vector_store_has_embeddings(VECTOR_DB_DIR):
         print("Loading existing vector store...")
         vector_db = load_vector_store(VECTOR_DB_DIR)
     else:
-        print("Processing PDFs and building the vector store...")
+        print("PDF vector store is missing or empty. Rebuilding it...")
         document_chunks = load_and_process_pdfs(zip_file_path)
         print(f"Total chunks created: {len(document_chunks)}")
 
@@ -52,11 +58,11 @@ def main():
 
 
     #Creating the Document DB
-    if os.path.exists(SCRAPED_VECTOR_DB_DIR) and os.listdir(SCRAPED_VECTOR_DB_DIR):
+    if vector_store_has_embeddings(SCRAPED_VECTOR_DB_DIR):
         print("Loading existing vector store...")
         scraped_vector_db = load_vector_store(SCRAPED_VECTOR_DB_DIR)
     else:
-        print("Processing PDFs and building the vector store...")
+        print("Primary-law vector store is missing or empty. Rebuilding it...")
         scraped_vector_db = create_scraped_vector_store(SCRAPED_VECTOR_DB_DIR)
         
 

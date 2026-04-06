@@ -36,6 +36,29 @@ def ask_star(user_query, role):
     else:
         return "Error: Vector store not loaded. Please ensure the backend is set up correctly.", gr.update(visible=False), gr.update(visible=False), gr.update(visible=False)
 
+    refusal = (
+        "Sorry, I can't answer that question. I can only answer questions about Massachusetts tenant law. "
+        "I may have misunderstood you, so try to phrase your input as a simple question."
+    )
+
+    # 1) First attempt (requested role)
+    response, citations = query_vector_store(scraped_vector_db, vector_db, user_query, role=role)
+    citation_text = "\n".join(f"• {c}" for c in citations) if citations else ""
+
+    # 2) If we got the refusal but we DO have citations, it's likely a false refusal.
+    #    Retry in GENERAL mode (neutral) to avoid role-guard bugs.
+    if response.strip() == refusal and citations:
+        response2, citations2 = query_vector_store(scraped_vector_db, vector_db, user_query, role="general")
+        # Prefer retry result if it is not the same refusal
+        if response2.strip() != refusal:
+            response, citations = response2, citations2
+            citation_text = "\n".join(f"• {c}" for c in citations) if citations else ""
+
+    # 3) Render output
+    if citations:
+        return f"{response}\n\n📚 Sources:\n{citation_text}"
+    return response
+
 if __name__ == "__main__":
     with gr.Blocks(title="Star - Massachusetts Housing Law Assistant") as iface:
         gr.Markdown("# ⭐ Star — Massachusetts Housing Law Assistant")
