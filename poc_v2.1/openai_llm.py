@@ -1,4 +1,4 @@
-from langchain_openai import ChatOpenAI  # Import ChatOpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain_core.language_models import BaseChatModel
 from llm_interface import LLM
 from prompt_templates import FIFTH_GRADE_PROMPT_TEMPLATE, STAGING_PROMPT_TEMPLATE
