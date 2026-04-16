@@ -1,5 +1,22 @@
 import os
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:
+    def load_dotenv(dotenv_path=".env"):
+        if not os.path.exists(dotenv_path):
+            return False
+
+        with open(dotenv_path, "r", encoding="utf-8") as env_file:
+            for raw_line in env_file:
+                line = raw_line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+
+                key, value = line.split("=", 1)
+                os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
+
+        return True
 
 def load_api_key(dotenv_path=".env"):
     load_dotenv(dotenv_path=dotenv_path)
