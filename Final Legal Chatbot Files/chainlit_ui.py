@@ -5,6 +5,7 @@ from typing import List, Dict, Tuple
 
 import chainlit as cl
 from chainlit.input_widget import Select
+from chainlit.context import local_steps
 from pypdf import PdfReader
 from openai import OpenAI
 
@@ -21,6 +22,14 @@ DEFAULT_ROLE = "general"
 ALLOWED_ROLES = {"general", "tenant", "landlord"}
 MIN_TEXT_CHARS_FOR_NON_OCR = 250
 MAX_OCR_PAGES = 12
+
+
+def _ensure_local_steps_context() -> None:
+    """Guard against missing Chainlit local_steps context in action callbacks."""
+    try:
+        local_steps.get()
+    except LookupError:
+        local_steps.set([])
 
 
 def _history_to_context(messages: List[Dict[str, str]], max_turns: int = 3) -> str:
@@ -287,6 +296,7 @@ def _build_role_actions() -> List[cl.Action]:
 
 
 async def _answer_query(user_text: str):
+    _ensure_local_steps_context()
     text = (user_text or "").strip()
     if not text:
         return
@@ -354,16 +364,18 @@ async def _answer_query(user_text: str):
 
 
 async def _set_role(role: str):
+    _ensure_local_steps_context()
     requested = (role or "").strip().lower()
     if requested not in ALLOWED_ROLES:
         await cl.Message(content="Invalid role. Use general, tenant, or landlord.").send()
         return
     cl.user_session.set("role", requested)
-    await cl.Message(content=f"Role updated to `{requested}`.").send()
+    await cl.Message(content=f"Role updated to `{requested}`.\n\nCurrent mode: `{requested}`.").send()
 
 
 @cl.on_chat_start
 async def on_chat_start():
+    _ensure_local_steps_context()
     cl.user_session.set("history", [])
     cl.user_session.set("role", DEFAULT_ROLE)
     cl.user_session.set("uploaded_docs", [])
@@ -386,12 +398,27 @@ async def on_chat_start():
     ]
     actions = _build_followup_actions(starters)
     role_actions = _build_role_actions()
+
+    # First-page branding message (large title).
     await cl.Message(
         content=(
-            "### ★ Star — Massachusetts Housing Law Assistant\n"
-            "Ask a question to start.\n\n"
-            "You can also upload a PDF (e.g., rent agreement). "
-            "The document is processed for this chat session only."
+            "# ★ STAR LEGAL LAW CHATBOT\n"
+            "## Massachusetts Housing Law Assistant\n\n"
+            "### Ask any doubts related to Massachusetts housing."
+        )
+    ).send()
+
+    # Separate first-page disclaimer block (keep distinct from footer disclaimer).
+    await cl.Message(
+        content=(
+            "## IMPORTANT DISCLAIMER\n"
+            "### This tool provides general legal information only.\n"
+            "### It is **not legal advice** and may not fit your specific situation.\n"
+            "### For legal advice, consult a licensed attorney.\n\n"
+            "**How to use**\n"
+            "- Use the mode toggle at the top-left to switch `general`, `tenant`, or `landlord` mode.\n"
+            "- Ask your housing-law question in plain language.\n"
+            "- Optionally upload a PDF (lease/notice/filing); it is used only for this chat session."
         ),
         actions=role_actions,
     ).send()
@@ -400,12 +427,14 @@ async def on_chat_start():
 
 @cl.on_settings_update
 async def on_settings_update(settings):
+    _ensure_local_steps_context()
     role = (settings or {}).get("role", DEFAULT_ROLE)
     await _set_role(role)
 
 
 @cl.on_message
 async def on_message(message: cl.Message):
+    _ensure_local_steps_context()
     pdfs = _extract_pdf_paths_from_message(message)
     if pdfs:
         current_docs = cl.user_session.get("uploaded_docs", [])
@@ -440,6 +469,7 @@ async def on_message(message: cl.Message):
 @cl.action_callback("followup_1")
 @cl.action_callback("followup_2")
 async def on_followup(action: cl.Action):
+    _ensure_local_steps_context()
     question = (action.payload or {}).get("question", "").strip()
     if question:
         await _answer_query(question)
@@ -449,6 +479,7 @@ async def on_followup(action: cl.Action):
 @cl.action_callback("role_tenant")
 @cl.action_callback("role_landlord")
 async def on_role_action(action: cl.Action):
+    _ensure_local_steps_context()
     role = (action.payload or {}).get("role", "").strip()
     if role:
         await _set_role(role)
