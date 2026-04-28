@@ -131,8 +131,10 @@ def query_vector_store(scraped_vector_db, vector_db, query, role="general"):
     else:
         raise ValueError(f"Unsupported LLM type: {DEFAULT_LLM}")
 
-    # Stage 1 — skip gating, use original query as-is
-    standardized_query = query
+    # Stage 1 — gate off-topic queries before retrieval
+    standardized_query = llm_engine.standardize_query(query)
+    if standardized_query.strip().lower().startswith("sorry, i can't answer"):
+        return standardized_query.strip(), []
 
     # Stage 2 — retrieve with MMR + reranker
     similar_docs, _ = combined_similarity_search_with_scores(
