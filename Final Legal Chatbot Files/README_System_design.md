@@ -75,6 +75,8 @@ flowchart TD
   Streamlit UI, same backend query path.
 - `chainlit_ui.py`  
   Chainlit UI with optional session PDF ingestion and OCR fallback.
+- Static front-end customization assets  
+  The Chainlit experience includes custom branding and client-side UI behavior overrides loaded via config, used to keep interface identity and UX consistent across deployments.
 ### B) Core RAG backend
 - `vector_store.py`  
   Loads Chroma DBs, retrieves from both sources, applies reranking/compression, calls LLM.
@@ -335,7 +337,18 @@ Open printed URL (commonly `http://localhost:8000`).
 Run:
 
 ```bash
-make verify-data
+python - <<'PY'
+import os
+checks = [
+    ("legal_tactics_scraped_raw.json", os.path.isfile("legal_tactics_scraped_raw.json")),
+    ("legal_tactics_scraped_clean.json", os.path.isfile("legal_tactics_scraped_clean.json")),
+    ("massachusetts_primary_laws_PERFECTION.json", os.path.isfile("massachusetts_primary_laws_PERFECTION.json")),
+    ("legal_tactics_chroma_db/", os.path.isdir("legal_tactics_chroma_db")),
+    ("~/poc_chroma/scraped_chroma_db/", os.path.isdir(os.path.expanduser("~/poc_chroma/scraped_chroma_db"))),
+]
+for name, ok in checks:
+    print(("OK   " if ok else "MISS "), name)
+PY
 ```
 
 Then manually validate:
