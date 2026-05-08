@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-def load_api_key(dotenv_path="../.env"):
+def load_api_key(dotenv_path=".env"):
     load_dotenv(dotenv_path=dotenv_path)
     openai_api_key = os.getenv("OPENAI_API_KEY")
     if openai_api_key is None:
@@ -11,8 +11,9 @@ def load_api_key(dotenv_path="../.env"):
     return openai_api_key
 
 # Define project-level constants
-VECTOR_DB_DIR = os.path.join(os.getcwd(), "/chroma_db")
-SCRAPED_VECTOR_DB_DIR = os.path.join(os.getcwd(), "/scaped_chroma_db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+VECTOR_DB_DIR = os.path.join(BASE_DIR, "chroma_db")
+SCRAPED_VECTOR_DB_DIR = os.path.join(BASE_DIR, "scraped_chroma_db")
 TEMP_PDF_DIR = "../temp_pdfs"
 DATA_DIR = "../data/Legal-Tactics-Book.zip"
 DEFAULT_LLM = "openai"

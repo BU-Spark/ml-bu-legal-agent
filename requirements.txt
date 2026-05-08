@@ -5,7 +5,6 @@ langchain-community
 pypdf
 langchain_chroma
 chromadb
-smolagents
 python-dotenv
 gradio
 sentence-transformers

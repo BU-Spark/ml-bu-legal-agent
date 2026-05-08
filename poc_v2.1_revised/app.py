@@ -9,25 +9,18 @@ load_api_key()
 vector_db = load_vector_store(VECTOR_DB_DIR)
 scraped_vector_db = load_vector_store(SCRAPED_VECTOR_DB_DIR)
 
-def make_links_clickable(text):
-    """Convert Markdown links [text](url) to HTML anchor tags that open in a new tab."""
-    return re.sub(r'\[([^\]]+)\]\((https?://[^\)]+)\)', r'<a href="\2" target="_blank">\1</a>', text)
-
 def ask_star(user_query, role):
     if vector_db:
         response, citations = query_vector_store(scraped_vector_db, vector_db, user_query, role=role)
-        citations = [make_links_clickable(c) for c in citations]
-        citation_text = "\n\n".join(citations)
+        citation_text = "\n".join(f"{c}" for c in citations)
         if "Sorry, I can't answer that question." in response:
             return "❌ " + response.strip().strip('"'), gr.update(visible=False), gr.update(visible=False), gr.update(visible=False)
         role_label = f"> 👤 **Answering as:** {role.capitalize()}\n\n"
+        full_response = f"{role_label}{response}\n\n---\n\n### 📚 Sources\n{citation_text}"
 
-        # Extract follow-up questions BEFORE converting links (avoids HTML interfering with regex)
-        followups = re.findall(r'[\u201c"\u201d]([^\u201c"\u201d]+\?)[\u201c"\u201d]', response)
+        # Extract follow-up questions from response
+        followups = re.findall(r'"([^"]+\?)"', response)
         followups = followups[:2]
-
-        response = make_links_clickable(response)
-        full_response = f"{role_label}{response}\n\n---\n\n### 📚 Sources\n\n{citation_text}"
 
         if len(followups) >= 1:
             return full_response, gr.update(visible=True), gr.update(value=f"💬 {followups[0]}", visible=True), gr.update(value=f"💬 {followups[1]}", visible=True) if len(followups) == 2 else gr.update(visible=False)
@@ -35,29 +28,6 @@ def ask_star(user_query, role):
             return full_response, gr.update(visible=False), gr.update(visible=False), gr.update(visible=False)
     else:
         return "Error: Vector store not loaded. Please ensure the backend is set up correctly.", gr.update(visible=False), gr.update(visible=False), gr.update(visible=False)
-
-    refusal = (
-        "Sorry, I can't answer that question. I can only answer questions about Massachusetts tenant law. "
-        "I may have misunderstood you, so try to phrase your input as a simple question."
-    )
-
-    # 1) First attempt (requested role)
-    response, citations = query_vector_store(scraped_vector_db, vector_db, user_query, role=role)
-    citation_text = "\n".join(f"• {c}" for c in citations) if citations else ""
-
-    # 2) If we got the refusal but we DO have citations, it's likely a false refusal.
-    #    Retry in GENERAL mode (neutral) to avoid role-guard bugs.
-    if response.strip() == refusal and citations:
-        response2, citations2 = query_vector_store(scraped_vector_db, vector_db, user_query, role="general")
-        # Prefer retry result if it is not the same refusal
-        if response2.strip() != refusal:
-            response, citations = response2, citations2
-            citation_text = "\n".join(f"• {c}" for c in citations) if citations else ""
-
-    # 3) Render output
-    if citations:
-        return f"{response}\n\n📚 Sources:\n{citation_text}"
-    return response
 
 if __name__ == "__main__":
     with gr.Blocks(title="Star - Massachusetts Housing Law Assistant") as iface:
@@ -84,7 +54,7 @@ if __name__ == "__main__":
             with gr.Column(scale=3):
                 pass
 
-        output = gr.Markdown(label="Star's Response", sanitize_html=False)
+        output = gr.Markdown(label="Star's Response")
 
         followup_heading = gr.Markdown("### 💬 Suggested Follow-up Questions", visible=False)
         with gr.Row():
@@ -109,4 +79,4 @@ if __name__ == "__main__":
             outputs=[output, followup_heading, followup_btn1, followup_btn2]
         )
 
-    iface.launch(server_name="0.0.0.0", server_port=7860)
+    iface.launch(server_name="0.0.0.0", server_port=7860,share=True)

@@ -1,7 +1,7 @@
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI  # Import ChatOpenAI
 from langchain_core.language_models import BaseChatModel
 from llm_interface import LLM
-from prompt_templates import FIFTH_GRADE_PROMPT_TEMPLATE, STAGING_PROMPT_TEMPLATE
+from prompt_engineering_user import FIFTH_GRADE_PROMPT_TEMPLATE, STAGING_PROMPT_TEMPLATE
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 
 class OpenAILLM(LLM):
@@ -20,8 +20,8 @@ class OpenAILLM(LLM):
             HumanMessagePromptTemplate.from_template("{question}")
         ])
 
-    def generate_response(self, question: str, context: str) -> str:
-        prompt = self.standardized_prompt_template.format_messages(context=context, question=question)
+    def generate_response(self, question: str, context: str, role: str = "general") -> str:
+        prompt = self.standardized_prompt_template.format_messages(context=context, question=question, role=role)
         try:
             response = self.llm.invoke(prompt)  # Use .invoke() for ChatOpenAI
             return response.content  # Access the content of the ChatMessage

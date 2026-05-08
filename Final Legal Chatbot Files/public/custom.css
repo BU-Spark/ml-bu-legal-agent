@@ -1,0 +1,324 @@
+/* Minimal UI customization only: top-left mode control + action/source colors. */
+
+/* Force-hide built-in Chainlit branding/logo in footer/header areas. */
+a[href*="chainlit"],
+a[href*="chainlit.io"],
+a[href*="github.com/Chainlit"],
+img[src*="logo_dark"],
+img[src*="logo_light"],
+img[src*="/logo?theme="],
+img[alt*="chainlit" i],
+[aria-label*="chainlit" i] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+footer a[href*="chainlit"],
+footer a[href*="chainlit.io"],
+footer img,
+footer [aria-label*="chainlit" i] {
+  display: none !important;
+}
+
+#star-mode-fab {
+  --mode-fab-border: rgba(255, 255, 255, 0.12);
+  --mode-fab-bg: rgba(255, 255, 255, 0.04);
+  --mode-fab-text: #d4d4d8;
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 10001;
+  min-width: 150px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--mode-fab-border);
+  background: var(--mode-fab-bg);
+  color: var(--mode-fab-text);
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+
+#star-mode-panel {
+  --mode-panel-border: rgba(255, 255, 255, 0.12);
+  --mode-panel-bg: rgba(24, 24, 27, 0.86);
+  --mode-title-color: #a1a1aa;
+  --mode-item-border: rgba(255, 255, 255, 0.1);
+  --mode-item-bg: rgba(255, 255, 255, 0.04);
+  --mode-item-text: #e4e4e7;
+  --mode-item-active-border: rgba(255, 255, 255, 0.22);
+  --mode-item-active-bg: rgba(255, 255, 255, 0.08);
+  position: fixed;
+  top: 58px;
+  left: 14px;
+  z-index: 10001;
+  min-width: 180px;
+  border-radius: 12px;
+  border: 1px solid var(--mode-panel-border);
+  background: var(--mode-panel-bg);
+  padding: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+}
+
+#star-mode-panel[hidden] {
+  display: none !important;
+}
+
+#star-mode-panel .star-mode-title {
+  font-size: 11px;
+  margin: 2px 6px 8px;
+  color: var(--mode-title-color);
+}
+
+#star-mode-panel button {
+  width: 100%;
+  margin: 3px 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--mode-item-border);
+  background: var(--mode-item-bg);
+  color: var(--mode-item-text);
+  text-align: left;
+}
+
+#star-mode-panel button.star-active {
+  border-color: var(--mode-item-active-border);
+  background: var(--mode-item-active-bg);
+}
+
+/* Light theme compatibility for mode controls */
+[data-theme="light"] #star-mode-fab,
+body.light #star-mode-fab,
+html.light #star-mode-fab {
+  --mode-fab-border: rgba(15, 23, 42, 0.18);
+  --mode-fab-bg: rgba(255, 255, 255, 0.72);
+  --mode-fab-text: #111827;
+}
+
+[data-theme="light"] #star-mode-panel,
+body.light #star-mode-panel,
+html.light #star-mode-panel {
+  --mode-panel-border: rgba(15, 23, 42, 0.18);
+  --mode-panel-bg: rgba(255, 255, 255, 0.94);
+  --mode-title-color: #4b5563;
+  --mode-item-border: rgba(15, 23, 42, 0.14);
+  --mode-item-bg: rgba(15, 23, 42, 0.03);
+  --mode-item-text: #111827;
+  --mode-item-active-border: rgba(15, 23, 42, 0.24);
+  --mode-item-active-bg: rgba(15, 23, 42, 0.08);
+}
+
+@media (prefers-color-scheme: light) {
+  #star-mode-fab {
+    --mode-fab-border: rgba(15, 23, 42, 0.18);
+    --mode-fab-bg: rgba(255, 255, 255, 0.72);
+    --mode-fab-text: #111827;
+  }
+
+  #star-mode-panel {
+    --mode-panel-border: rgba(15, 23, 42, 0.18);
+    --mode-panel-bg: rgba(255, 255, 255, 0.94);
+    --mode-title-color: #4b5563;
+    --mode-item-border: rgba(15, 23, 42, 0.14);
+    --mode-item-bg: rgba(15, 23, 42, 0.03);
+    --mode-item-text: #111827;
+    --mode-item-active-border: rgba(15, 23, 42, 0.24);
+    --mode-item-active-bg: rgba(15, 23, 42, 0.08);
+  }
+}
+
+/* Keep requested custom colors */
+button.star-suggested-btn {
+  background-color: #e11d48 !important;
+  color: #ffffff !important;
+  border-color: #be123c !important;
+}
+
+button.star-suggested-btn:hover {
+  background-color: #be123c !important;
+}
+
+.markdown a {
+  color: #1d4ed8 !important;
+}
+
+/* Footer as a subtle line under the composer area */
+#legal-disclaimer-footer {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 120;
+  font-size: 11px;
+  text-align: center;
+  padding: 6px 12px 7px;
+  border-radius: 0;
+  background: rgba(24, 24, 27, 0.72);
+  color: #cbd5e1;
+  border-top: 1px solid rgba(148, 163, 184, 0.22);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+#legal-disclaimer-footer .star-brand {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-bottom: 1px;
+}
+
+#legal-disclaimer-footer .brand-star {
+  margin-right: 6px;
+  display: inline-flex;
+  vertical-align: -2px;
+}
+
+#legal-disclaimer-footer .star-disclaimer {
+  font-weight: 700;
+}
+
+/* Guaranteed first-screen landing block */
+#star-landing-hero {
+  position: fixed;
+  left: 50%;
+  top: 88px;
+  transform: translateX(-50%);
+  z-index: 9000;
+  width: min(860px, 92vw);
+  text-align: center;
+  pointer-events: auto;
+  --hero-title-color: #f8fafc;
+  --hero-subtitle-color: #d1d5db;
+  --hero-disclaimer-color: #e5e7eb;
+  --hero-title-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+  --hero-subtitle-shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
+  --hero-disclaimer-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Light theme compatibility */
+[data-theme="light"] #star-landing-hero,
+body.light #star-landing-hero,
+html.light #star-landing-hero {
+  --hero-title-color: #111827;
+  --hero-subtitle-color: #374151;
+  --hero-disclaimer-color: #1f2937;
+  --hero-title-shadow: none;
+  --hero-subtitle-shadow: none;
+  --hero-disclaimer-shadow: none;
+}
+
+/* Fallback when UI follows OS theme */
+@media (prefers-color-scheme: light) {
+  #star-landing-hero {
+    --hero-title-color: #111827;
+    --hero-subtitle-color: #374151;
+    --hero-disclaimer-color: #1f2937;
+    --hero-title-shadow: none;
+    --hero-subtitle-shadow: none;
+    --hero-disclaimer-shadow: none;
+  }
+}
+
+#star-landing-hero .hero-card {
+  margin: 0 auto;
+  background: transparent;
+  border: none;
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: auto;
+}
+
+#star-landing-hero .hero-title {
+  font-size: clamp(30px, 4.4vw, 52px);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: var(--hero-title-color);
+  line-height: 1.08;
+  margin-bottom: 10px;
+  text-shadow: var(--hero-title-shadow);
+  pointer-events: none;
+}
+
+#star-landing-hero .hero-star {
+  margin-right: 10px;
+  display: inline-flex;
+  vertical-align: -6px;
+}
+
+.scale-icon {
+  width: 1em;
+  height: 1em;
+  stroke: #f472b6;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgba(244, 114, 182, 0.42));
+}
+
+#star-landing-hero .hero-subtitle {
+  font-size: clamp(16px, 1.9vw, 24px);
+  font-weight: 700;
+  color: var(--hero-subtitle-color);
+  margin-bottom: 12px;
+  text-shadow: var(--hero-subtitle-shadow);
+  pointer-events: none;
+}
+
+#star-landing-hero .hero-disclaimer {
+  font-size: clamp(13px, 1.25vw, 18px);
+  font-weight: 700;
+  color: var(--hero-disclaimer-color);
+  line-height: 1.4;
+  max-width: 760px;
+  margin: 0 auto;
+  text-shadow: var(--hero-disclaimer-shadow);
+  pointer-events: none;
+}
+
+#star-landing-hero .hero-native-suggestions {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+#star-landing-hero .hero-native-btn {
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #be123c;
+  background: #e11d48;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+#star-landing-hero .hero-native-btn:hover {
+  background: #be123c;
+}
+
+@media (max-width: 900px) {
+  #star-landing-hero {
+    top: 72px;
+  }
+
+  #star-landing-hero .hero-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+}

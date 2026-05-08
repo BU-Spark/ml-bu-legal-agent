@@ -19,41 +19,29 @@ def extract_zip(uploaded_zip_path, extract_to="../temp_pdfs"):
     return pdf_files
 
 def pdf_to_markdown_string(pdf_path):
-    """Extracts page-aware content while preserving the current section header."""
+    """Extracts structured content while preserving section headers."""
     with pdfplumber.open(pdf_path) as pdf:
+        sections = {}
         current_section = None
         skipped_pages = 2  # Skip first two pages bc table of contents extends 
-        page_records = []
 
-        for page_num, page in enumerate(pdf.pages[skipped_pages:], start=skipped_pages + 1):
+        for page_num, page in enumerate(pdf.pages[skipped_pages:]):  
             text = page.extract_text()
             if not text:
                 continue
 
-            lines = [line.strip() for line in text.split("\n") if line.strip()]
-            page_section = current_section
-            page_lines = []
+            lines = text.split("\n")
 
             for line in lines:
                 if re.match(r"^\s*Chapter \d+:?", line) or re.match(r"^[A-Z][A-Z\s]+$", line.strip()):
                     current_section = line.strip()
-                    page_section = current_section
-                    continue
+                    sections[current_section] = sections.get(current_section, "")
+                elif current_section:
+                    sections[current_section] += line.strip() + "\n"
 
-                page_lines.append(line.strip())
-
-            page_text = "\n".join(page_lines).strip()
-            if page_text:
-                page_records.append({
-                    "content": page_text,
-                    "metadata": {
-                        "source": os.path.basename(pdf_path),
-                        "section_title": page_section,
-                        "page_number": page_num,
-                    },
-                })
-
-    return page_records
+    # Ensure section headers stay attached to their respective text chunks
+    markdown_chunks = [f"## {section}\n\n{content.strip()}\n\n" for section, content in sections.items()]
+    return markdown_chunks
 
 def determine_role(text):
     """Assigns a role based on detected keywords. Might need to do a bit more research 
@@ -69,5 +57,6 @@ def determine_role(text):
 
 
 def process_single_pdf(pdf_path):
-    """Processes a single PDF into page-aware content records."""
-    return pdf_to_markdown_string(pdf_path)
+    """Processes a single PDF to extract markdown sections."""
+    markdown_sections = pdf_to_markdown_string(pdf_path)
+    return markdown_sections
